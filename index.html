@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Reazn Portfolio</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+
+  <body>
+    <!-- Invisible scroll markers -->
+    <div id="marker-section1" class="scroll-marker"></div>
+    <div id="marker-section2" class="scroll-marker"></div>
+    <div id="marker-section3" class="scroll-marker"></div>
+    <div id="marker-section4" class="scroll-marker"></div>
+
+    <header class="header-blur"></header>
+    <header>
+      <nav>
+        <ul>
+          <li><a href="#marker-section1">Home</a></li>
+          <li><a href="#marker-section2">About</a></li>
+          <li><a href="#marker-section3">Portfolio</a></li>
+          <li><a href="#marker-section4">Contact</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <div id="overlay"></div>
+    <div id="follower"></div>
+
+    <div class="custom-cursor">
+      <div class="cursor-dot"></div>
+      <div class="cursor-outline"></div>
+    </div>
+
+    <div class="section section-1" id="section1">
+      <a href="#marker-section2" class="independent-button">Find Out More</a>
+      <div class="background"></div>
+      <div class="content">
+        <h1 class="headline">this is reazn<br /></h1>
+        <h1 class="description">
+          I'm a
+          <span class="replacement"> </span>
+        </h1>
+      </div>
+    </div>
+
+    <div id="section2" class="section section-2">
+      <div class="background"></div>
+      <div class="content">
+        <div class="about-container">
+          <div class="about-text">
+            <h1>About me</h1>
+            <p>
+              Hi.👋 My name is Reazn. <br />
+              I'm a 16-year-old Swiss IT student. In my <br />spare time I
+              dabble in photography, videography, <br />as well as editing and
+              graphic design. <br />
+              <i style="font-size: smaller"
+                >According to my choice of profession, I also do UI/UX design
+                ;)</i
+              ><br />
+              <br />
+              I love creating and leaving something behind. <br/>Whether I'm diving into 
+              design work or shooting <br />and editing videos or photos, 
+              I love bringing <br />my and others' ideas to life. <br />
+              <br />
+            </p>
+            <div class="about-button">
+              <a href="#marker-section4">Contact me</a>
+            </div>
+          </div>
+          <div class="tagcloud" id="tagcloud"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section section-3" id="section3">
+      <div class="background"></div>
+      <div class="content">
+        <h1>My Portfolio</h1>
+        
+        <div class="portfolio-nav">
+          <a class="portfolio-link" href="/Subpages/photography.html" data-section="photography">📸 Photography</a>
+          <a class="portfolio-link" href="/Subpages/graphics-design.html" data-section="design">🎨 Graphic Design</a>
+          <a class="portfolio-link" href="/Subpages/programming.html" data-section="programming">💻 Programming</a>
+        </div>
+    
+        <div class="portfolio-sections">
+        </div>
+      </div>
+    </div>
+
+    <div class="section section-4" id="section4">
+      <div class="background"></div>
+      <div class="content">
+        <h1>Contact Me</h1>
+        <div class="about-text">
+          <p style="color: white">
+            The best way to reach me is through<a
+              href="https://discord.com/users/699913103378350122"
+              class="contact-link"
+              style="color: white"
+              >Discord</a
+            >
+            <br />
+            where I'm most active and fastest to respond. <br />
+            However, you can also contact me via<a
+              href="mailto:reazn.dev@gmail.com"
+              class="contact-link"
+              style="color: inherit; text-decoration: none"
+              >email</a
+            >or<a
+              href="https://github.com/FlorianRuby"
+              class="contact-link"
+              style="color: inherit; text-decoration: none"
+              >GitHub.</a
+            >
+            <br />
+          </p>
+
+          <p style="font-style: italic; font-size: smaller">
+            If you see this, it means I'm currently unavailable on Discord.
+            <br />You can reach out, but I'll only reply once my status is
+            <span style="color: #43b581">green</span>.
+          </p>
+          <div id="discord-status" class="discord-card">
+            <div class="card-content">
+              <div class="profile-content">
+                <div class="left-content">
+                  <div class="avatar-wrapper">
+                    <img class="avatar" src="" alt="Discord Avatar" />
+                    <div class="status-indicator"></div>
+                  </div>
+                  <div class="user-info">
+                    <div class="username"></div>
+                    <div class="activity-status"></div>
+                  </div>
+                </div>
+                <img class="spotify-album-art" src="" alt="Album Art" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section section-5" id="section5">
+        </div>
+      </div>
+
+    <footer>
+      <div class="footer-content">
+        <div class="footer-left-container">
+          <a href="#marker-section1">
+            <img
+              src="/assets/logo 3d-ish.png"
+              alt="Reazn Logo"
+              class="footer-logo"
+            />
+          </a>
+        </div>
+        <div class="footer-right-container">
+          <div class="social-links">
+            <a href="mailto:reazn.dev@gmail.com">Mail</a>
+            <a href="https://github.com/FlorianRuby">Github</a>
+            <a href="#">Discord</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-copyright">© 2024 Reazn. All rights reserved.</div>
+    </footer>
+    <script src="script.js"></script>
+  </body>
+</html>
