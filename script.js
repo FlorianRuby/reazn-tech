@@ -553,3 +553,80 @@ document.addEventListener('DOMContentLoaded', function() {
     // Show initial section
     showPortfolioSection('photography');
 });
+
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    const projects = document.querySelectorAll('.project');
+    const previewImage = document.getElementById('preview-image');
+    const previewWindow = document.querySelector('.preview-window');
+
+    const offsetX = -150;
+    const offsetY = -150;
+
+    let mouseX = 0, mouseY = 0;
+    let followerX = 0, followerY = 0;
+    const delay = 0.2;
+
+    let prevMouseX = 0;
+    let rotation = 0;
+    let isRotatingBack = false;
+    let rotationStartTime = 0;
+    const resetDuration = 3000;
+
+    function moveFollower() {
+        const dx = mouseX - followerX;
+        const dy = mouseY - followerY;
+
+        followerX += dx * delay;
+        followerY += dy * delay;
+
+        previewWindow.style.left = `${followerX + offsetX}px`;
+        previewWindow.style.top = `${followerY + offsetY}px`;
+
+        const deltaX = mouseX - prevMouseX;
+        if (deltaX !== 0) {
+            rotation += deltaX * 0.02;
+            isRotatingBack = false;
+        } else if (!isRotatingBack) {
+            isRotatingBack = true;
+            rotationStartTime = Date.now();
+        }
+
+        rotation = Math.max(-5, Math.min(5, rotation));
+
+        if (isRotatingBack) {
+            const elapsed = Date.now() - rotationStartTime;
+            const progress = Math.min(elapsed / resetDuration, 1);
+            rotation = rotation * (1 - progress);
+            if (progress >= 1) isRotatingBack = false;
+        }
+
+        previewImage.style.transform = `rotate(${rotation}deg)`;
+
+        prevMouseX = mouseX;
+
+        requestAnimationFrame(moveFollower);
+    }
+
+    document.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+    });
+
+    moveFollower();
+
+    projects.forEach((project) => {
+        project.addEventListener('mouseenter', () => {
+            const imagePath = project.getAttribute('data-preview');
+            previewImage.src = imagePath;
+            previewImage.style.opacity = 1;
+            document.body.classList.add('hide-cursor');
+        });
+
+        project.addEventListener('mouseleave', () => {
+            previewImage.style.opacity = 0;
+            document.body.classList.remove('hide-cursor');
+        });
+    });
+});
