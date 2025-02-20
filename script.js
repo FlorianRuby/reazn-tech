@@ -397,81 +397,6 @@ function updateDiscordStatus() {
         .catch(error => {
             console.error('Error fetching Discord status:', error);
         });
-
-        function updateDiscordStatus() {
-            fetch(`https://api.lanyard.rest/v1/users/${DISCORD_ID}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (!data.success) return;
-                    
-                    const status = data.data;
-                    const discordCard = document.getElementById('discord-status');
-                    
-                    // Update avatar and status
-                    discordCard.querySelector('.avatar').src = 
-                        `https://cdn.discordapp.com/avatars/${DISCORD_ID}/${status.discord_user.avatar}`;
-                    
-                    discordCard.querySelector('.status-indicator').className = 
-                        `status-indicator status-${status.discord_status}`;
-                    
-                    // Update username
-                    discordCard.querySelector('.username').textContent = status.discord_user.username;
-                    
-                    // Update availability message based on status
-                    const statusMessage = document.querySelector('.about-text p[style="font-style: italic; font-size: smaller"]');
-                    
-                    if (statusMessage) {
-                        if (status.discord_status === 'online' || status.discord_status === 'dnd') {
-                            statusMessage.innerHTML = `If you see this, it means I'm currently available on Discord,
-                                <br />feel free to send me a message!`;
-                        } else {
-                            // For 'idle' and 'offline' statuses
-                            statusMessage.innerHTML = `If you see this,
-                                it means I'm currently unavailable on Discord. <br />You can reach
-                                out, but I'll only reply once my status is
-                                <span style="color: #43b581">green</span>.`;
-                        }
-                    }
-                    
-                    // Update spotify status
-                    const activityStatus = discordCard.querySelector('.activity-status');
-                    const albumArt = discordCard.querySelector('.spotify-album-art');
-                    
-                    if (status.listening_to_spotify) {
-                        const truncatedSong = truncateText(status.spotify.song, SONG_NAME_LIMIT);
-                        const truncatedArtist = truncateText(status.spotify.artist, ARTIST_NAME_LIMIT);
-                        
-                        activityStatus.innerHTML = `<span class="listening-text">Listening to</span> ${truncatedSong}<br>by ${truncatedArtist}`;
-                        albumArt.src = status.spotify.album_art_url;
-                        albumArt.style.display = 'block';
-                    } else {
-                        // Check for custom status
-                        const customActivity = status.activities.find(activity => activity.type === 4);
-                        if (customActivity && customActivity.state) {
-                            let statusText = customActivity.state;
-                            if (customActivity.emoji) {
-                                const emojiImg = customActivity.emoji.id ? 
-                                    `<img src="https://cdn.discordapp.com/emojis/${customActivity.emoji.id}.png" class="status-emoji" alt="emoji">` :
-                                    customActivity.emoji.name;
-                                statusText = `${emojiImg} ${statusText}`;
-                            }
-                            activityStatus.innerHTML = statusText;
-                            albumArt.style.display = 'none';
-                        } else {
-                            activityStatus.textContent = '';
-                            albumArt.style.display = 'none';
-                        }
-                    }
-                })
-                .catch(error => {
-                    console.error('Error fetching Discord status:', error);
-                });
-        }
-        
-        // Initialize Discord status and set up auto-update
-        updateDiscordStatus();
-        setInterval(updateDiscordStatus, 15000);
-        
 }
 
 // Initialize Discord status and set up auto-update
@@ -508,105 +433,33 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-
+// Project preview functionality
 document.addEventListener('DOMContentLoaded', function() {
-    // Add portfolio links to interactive elements
-    const portfolioLinks = document.querySelectorAll('.portfolio-link');
-    portfolioLinks.forEach(link => {
-        link.addEventListener('mouseenter', startHoverTransition);
-        link.addEventListener('mouseleave', endHoverTransition);
-    });
-
-    // Portfolio section switching
-    function showPortfolioSection(sectionId) {
-        // Hide all sections
-        document.querySelectorAll('.portfolio-section').forEach(section => {
-            section.classList.remove('active');
-        });
-        
-        // Remove active class from all links
-        portfolioLinks.forEach(link => {
-            link.classList.remove('active');
-        });
-        
-        // Show selected section
-        const targetSection = document.getElementById(`${sectionId}-section`);
-        if (targetSection) {
-            targetSection.classList.add('active');
-        }
-        
-        // Add active class to clicked link
-        const activeLink = document.querySelector(`.portfolio-link[data-section="${sectionId}"]`);
-        if (activeLink) {
-            activeLink.classList.add('active');
-        }
-    }
-
-    // Add click handlers to portfolio links
-    portfolioLinks.forEach(link => {
-        link.addEventListener('click', () => {
-            const section = link.getAttribute('data-section');
-            showPortfolioSection(section);
-        });
-    });
-
-    // Show initial section
-    showPortfolioSection('photography');
-});
-
-
-
-document.addEventListener('DOMContentLoaded', function () {
     const projects = document.querySelectorAll('.project');
     const previewImage = document.getElementById('preview-image');
     const previewWindow = document.querySelector('.preview-window');
+    const follower = document.getElementById('follower');
+    const overlay = document.getElementById('overlay');
 
-    const offsetX = -150;
-    const offsetY = -150;
+    if (!projects.length || !previewImage || !previewWindow) return;
 
     let mouseX = 0, mouseY = 0;
-    let followerX = 0, followerY = 0;
-    const delay = 0.2;
+    let currentX = 0, currentY = 0;
+    const ease = 0.15;
 
-    let prevMouseX = 0;
-    let rotation = 0;
-    let isRotatingBack = false;
-    let rotationStartTime = 0;
-    const resetDuration = 3000;
+    function animate() {
+        const dx = mouseX - currentX;
+        const dy = mouseY - currentY;
 
-    function moveFollower() {
-        const dx = mouseX - followerX;
-        const dy = mouseY - followerY;
+        currentX += dx * ease;
+        currentY += dy * ease;
 
-        followerX += dx * delay;
-        followerY += dy * delay;
-
-        previewWindow.style.left = `${followerX + offsetX}px`;
-        previewWindow.style.top = `${followerY + offsetY}px`;
-
-        const deltaX = mouseX - prevMouseX;
-        if (deltaX !== 0) {
-            rotation += deltaX * 0.02;
-            isRotatingBack = false;
-        } else if (!isRotatingBack) {
-            isRotatingBack = true;
-            rotationStartTime = Date.now();
+        if (previewImage.classList.contains('visible')) {
+            previewImage.style.left = `${currentX}px`;
+            previewImage.style.top = `${currentY}px`;
         }
 
-        rotation = Math.max(-5, Math.min(5, rotation));
-
-        if (isRotatingBack) {
-            const elapsed = Date.now() - rotationStartTime;
-            const progress = Math.min(elapsed / resetDuration, 1);
-            rotation = rotation * (1 - progress);
-            if (progress >= 1) isRotatingBack = false;
-        }
-
-        previewImage.style.transform = `rotate(${rotation}deg)`;
-
-        prevMouseX = mouseX;
-
-        requestAnimationFrame(moveFollower);
+        requestAnimationFrame(animate);
     }
 
     document.addEventListener('mousemove', (e) => {
@@ -614,19 +467,89 @@ document.addEventListener('DOMContentLoaded', function () {
         mouseY = e.clientY;
     });
 
-    moveFollower();
-
+    // Handle project hover
     projects.forEach((project) => {
         project.addEventListener('mouseenter', () => {
             const imagePath = project.getAttribute('data-preview');
             previewImage.src = imagePath;
-            previewImage.style.opacity = 1;
+            previewImage.classList.add('visible');
             document.body.classList.add('hide-cursor');
+            
+            // Add class to hide follower
+            if (follower) {
+                follower.classList.add('preview-visible');
+            }
         });
 
         project.addEventListener('mouseleave', () => {
-            previewImage.style.opacity = 0;
+            previewImage.classList.remove('visible');
             document.body.classList.remove('hide-cursor');
+            
+            // Remove class to show follower
+            if (follower) {
+                follower.classList.remove('preview-visible');
+            }
         });
     });
+
+    animate();
+});
+
+// Remove the separate project preview functionality and integrate it with the cursor system
+document.addEventListener('DOMContentLoaded', function() {
+    // ... existing cursor variables ...
+    const projects = document.querySelectorAll('.project');
+    const previewImage = document.getElementById('preview-image');
+    const previewWindow = document.querySelector('.preview-window');
+
+    if (!projects.length || !previewImage || !previewWindow) return;
+
+    let mouseX = 0, mouseY = 0;
+    let currentX = 0, currentY = 0;
+    const ease = 0.15;
+
+    function animate() {
+        const dx = mouseX - currentX;
+        const dy = mouseY - currentY;
+
+        currentX += dx * ease;
+        currentY += dy * ease;
+
+        if (previewImage.classList.contains('visible')) {
+            previewImage.style.left = `${currentX}px`;
+            previewImage.style.top = `${currentY}px`;
+        }
+
+        requestAnimationFrame(animate);
+    }
+
+    document.addEventListener('mousemove', updateCursorPosition);
+
+    // Add projects to interactive elements
+    const interactiveElements = document.querySelectorAll('a, button, .about-button, header nav ul li, .independent-button, .discord-card, .portfolio-link, .project');
+
+    interactiveElements.forEach(element => {
+        if (element.classList.contains('project')) {
+            // Special handling for projects
+            element.addEventListener('mouseenter', () => {
+                startHoverTransition();
+                const imagePath = element.getAttribute('data-preview');
+                previewImage.src = imagePath;
+                previewImage.classList.add('visible');
+                document.body.classList.add('hide-cursor');
+            });
+
+            element.addEventListener('mouseleave', () => {
+                endHoverTransition();
+                previewImage.classList.remove('visible');
+                document.body.classList.remove('hide-cursor');
+            });
+        } else {
+            // Normal interactive element handling
+            element.addEventListener('mouseenter', startHoverTransition);
+            element.addEventListener('mouseleave', endHoverTransition);
+        }
+    });
+
+    animate();
 });

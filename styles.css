@@ -1,11 +1,11 @@
 @font-face {
   font-family: "RedHatSemiBold";
-  src: url(/assets/fonts/RedHatDisplay-SemiBold.ttf);
+  src: url(./assets/fonts/RedHatDisplay-SemiBold.ttf);
 }
 
 @font-face {
   font-family: "RedHatLight";
-  src: url(/assets/fonts/RedHatDisplay-Light.ttf);
+  src: url(./assets/fonts/RedHatDisplay-Light.ttf);
 }
 
 body,
@@ -145,7 +145,7 @@ header nav ul li a {
   backdrop-filter: blur(120px);
   -webkit-backdrop-filter: blur(120px);
   transition: transform 0.15s ease-out, scale 0.2s ease-out,
-    visibility 0.1s ease-out;
+    visibility 0.1s ease-out, opacity 0.3s ease;
 }
 
 #overlay {
@@ -159,9 +159,36 @@ header nav ul li a {
   -webkit-backdrop-filter: blur(120px);
   z-index: 10;
   pointer-events: none;
-  transition: transform 0.25s ease-out;
+  transition: transform 0.25s ease-out, opacity 0.3s ease;
 }
 
+.preview-window {
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+}
+
+.preview-window img {
+    max-width: 250px;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(203, 110, 240, 0.5);
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.2s ease;
+    transform: scale(0.95) translate(-50%, -50%);
+    position: fixed;
+    pointer-events: none;
+}
+
+.preview-window img.visible {
+    opacity: 1;
+    transform: scale(1) translate(-50%, -50%);
+    box-shadow: none;
+}
 
 .independent-button {
   position: fixed;
@@ -306,7 +333,7 @@ header nav ul li a {
   align-items: flex-start;
  
   width: 100%;
-  max-width: 1400px;
+  max-width: 2000px;
   position: relative;
   margin-right: 400px;
 }
@@ -381,7 +408,7 @@ header nav ul li a {
 }
 .section-3 {
   line-height: 1.3em;
-  height: 850px;
+  height: 1600px;
 }
 
 .section-3 .content {
@@ -390,12 +417,21 @@ header nav ul li a {
   color: white;
   font-size: 2em;
   padding-left: 10%;
+  padding-right: 0;
   box-sizing: border-box;
-  line-height: 1.5em;
-  margin-top: 10%;
+  line-height: 1.3em;
+  margin-top: 5%;
   z-index: 999;
+  width: 100%;
+  max-width: 2000px;
+  margin-right: auto;
+  margin-left: auto;
 }
 
+.section-3 .content h1 {
+  font-size: 2em;
+  margin-bottom: 20px;
+}
 
 
 .section-4 {
@@ -558,9 +594,9 @@ header nav ul li a {
 .about-container {
   display: flex;
   justify-content: flex-start;
-  align-items: center;
+  align-items: flex-start;
   width: 100%;
-  max-width: 1400px;
+  max-width: 2000px;
   position: relative;
   margin-right: 400px;
 }
@@ -669,24 +705,21 @@ footer {
   margin-top: 0;
   margin-bottom: 8px;
   opacity: 1;
+  padding-left: 6%;
 }
 
 .footer-left-container {
-  width: 50%;
+  width: 42%;
   display: flex;
   justify-content: flex-end;
- 
   padding-right: 20px;
- 
 }
 
 .footer-right-container {
-  width: 50%;
+  width: 58%;
   display: flex;
   justify-content: flex-start;
- 
   padding-left: 10px;
- 
 }
 
 .footer-logo {
@@ -733,6 +766,7 @@ footer {
   .footer-content {
     flex-direction: column;
     align-items: center;
+    padding-left: 0;
   }
 
   .footer-left-container,
@@ -926,23 +960,9 @@ footer,
 
 
 
-.section-3 .content {
-  position: relative;
-  z-index: 10;
-  color: white;
-  font-size: 2em;
-  padding-left: 10%;
-  box-sizing: border-box;
-  line-height: 1.5em;
-  margin-top: 10%;
-  z-index: 999;
-}
-
-
 .portfolio-nav {
   display: flex;
-  flex-direction: column;
-  gap: 25px;
+  gap: 40px;
   margin: 40px 0;
   padding-left: 0;
   align-items: flex-start;
@@ -953,13 +973,29 @@ footer,
   color: white;
   font-family: "RedHatLight";
   font-size: 1.2em;
-  cursor: none;
+  cursor: pointer;
   width: fit-content;
   padding: 5px 0;
+  text-decoration: none;
 }
 
+span.portfolio-link.active {
+  color: rgb(203, 110, 240);
+  cursor: default;
+}
 
-.portfolio-link::after {
+span.portfolio-link.active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 2px;
+  width: 100%;
+  height: 2px;
+  background: rgb(203, 110, 240);
+  transform: scaleX(1);
+}
+
+a.portfolio-link::after {
   content: "";
   position: absolute;
   left: 0;
@@ -972,290 +1008,75 @@ footer,
   transition: transform 0.3s ease;
 }
 
-.portfolio-link:hover::after {
-  transform: scaleX(1);
-}
-
-
-.portfolio-link.active {
-  color: rgb(203, 110, 240);
-}
-
-.portfolio-link.active::after {
+a.portfolio-link:hover::after {
   transform: scaleX(1);
 }
 
 .portfolio-sections {
   margin-top: 40px;
-  padding: 0 5%;
+  padding: 0;
+  width: 90%;
+  margin-left: 0;
 }
-
-.portfolio-section {
-  display: none;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.portfolio-section.active {
-  display: block;
-  opacity: 1;
-}
-
-
-
-
-
-
-
-
-
-.gd-container {
-    width: 60%;
-    margin: 0 auto;
-    margin-top: 3%;
-}
-
-.gd-header {
-    text-align: center;
-    margin-bottom: 3rem;
-}
-
-
-.gd-subtitle {
-    margin-top: 5%;
-    color: rgb(203, 110, 240);
-    font-size: 1.8rem;
-}
-
-.gd-grid {
-   
-    column-count: 3;
-    column-gap: 2rem;
-}
-
-.gd-poster-item {
-    position: relative;
-    background-color: #fff;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease;
-    margin-bottom: 2rem;
-    break-inside: avoid;
-    display: block;
-}
-
-.gd-poster-item:not(.square) {
-    aspect-ratio: 18/24;
-}
-
-.gd-poster-item.square {
-    aspect-ratio: 1/1;
-}
-
-.gd-poster-item:hover {
-    transform: translateY(-5px);
-}
-
-.gd-poster-item img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-}
-
-
-@media (max-width: 1200px) {
-    .gd-container {
-        width: 80%;
-    }
-}
-
-@media (max-width: 768px) {
-    .gd-grid {
-        column-count: 2;
-    }
-}
-
-@media (max-width: 480px) {
-    .gd-grid {
-        column-count: 1;
-    }
-    .gd-container {
-        width: 90%;
-    }
-}
-
-
-
-
-
-
-.ph-container {
-  width: 60%;
-  margin: 0 auto;
-  margin-top: 3%;
-}
-
-.ph-header {
-  text-align: center;
-  margin-bottom: 3rem;
-}
-
-.ph-subtitle {
-  margin-top: 5%;
-  color: rgb(203, 110, 240);
-  font-size: 1.8rem;
-}
-
-.ph-grid {
-  column-count: 2;
-  column-gap: 2rem;
-}
-
-.ph-poster-item {
-  position: relative;
-  background-color: #fff;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease;
-  margin-bottom: 2rem;
-  break-inside: avoid;
-  display: block;
-}
-
-.ph-poster-item.vertical {
-  aspect-ratio: 2/3;
-}
-
-.ph-poster-item.horizontal {
-  aspect-ratio: 3/2;
-}
-
-.ph-poster-item:hover {
-  transform: translateY(-5px);
-}
-
-.ph-poster-item img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-
-@media (max-width: 1200px) {
-  .ph-container {
-      width: 80%;
-  }
-}
-
-@media (max-width: 768px) {
-  .ph-grid {
-      column-count: 1;
-  }
-}
-
-@media (max-width: 480px) {
-  .ph-container {
-      width: 90%;
-  }
-}
-
-
-
-
-
-
-
-
-
-.portfolio-container {
-  display: flex;
-  height: 100vh;
-}
-
 
 .projects-list {
   width: 100%;
-  padding: 40px;
-  overflow-y: auto;
-  padding-left: 5em;
-}
-
-.projects-list h1 {
-  font-size: 2.5em;
-  margin-bottom: 20px;
+  padding: 20px 0;
+  position: relative;
+  z-index: 100;
+  max-width: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
 }
 
 .projects-list p {
   font-size: 1.2em;
   margin-bottom: 40px;
+  color: white;
 }
 
 .project {
-  margin-bottom: 40px;
-  cursor: pointer;
+  margin-bottom: 0;
+  cursor: none;
   position: relative;
-}
-
-
-.project::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  bottom: -20px;
+  padding: 30px 0;
+  border-bottom: 2px solid rgba(203, 110, 240, 0.2);
+  transition: border-color 0.3s ease;
   width: 100%;
-  height: 1px;
-  background: rgba(203, 110, 240, 0.2);
 }
 
+.project:last-child {
+  border-bottom: none;
+  padding-bottom: 250px;
+}
 
-.project:last-child::after {
-  display: none;
+.project:hover + .project {
+  border-top-color: rgba(203, 110, 240, 0.5);
+}
+
+.project h2,
+.project p,
+.tags {
+  padding-right: 0;
+  max-width: 100%;
 }
 
 .project h2 {
   color: rgb(203, 110, 240);
-  font-size: 1.8em;
-  margin-bottom: 10px;
+  font-size: 1.4em;
+  margin-bottom: 8px;
 }
 
 .project p {
   color: white;
-  font-size: 1em;
-  margin-bottom: 10px;
-}
-
-.tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.tags span {
-  background: rgba(203, 110, 240, 0.2);
-  color: rgb(203, 110, 240);
-  padding: 4px 8px;
-  border-radius: 4px;
   font-size: 0.9em;
-}
-
-
-.preview-window {
-  position: fixed;
-  pointer-events: none;
-  transition: transform 0.1s ease-out;
+  margin-bottom: 8px;
+  line-height: 1.4;
 }
 
 .preview-window img {
-  max-width: 300px;
-  max-height: 300px;
-  border-radius: 10px;
-  box-shadow: 0 0 20px rgba(203, 110, 240, 0.5);
-  transition: opacity 0.3s ease, transform 0.2s ease-out;
-
+  cursor: none;
 }
 
 
@@ -1293,4 +1114,39 @@ body.hide-cursor {
 
 .preview-window img {
   cursor: none;
+}
+
+.tags {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.tags span {
+  background: rgba(203, 110, 240, 0.1);
+  border: 1px solid rgba(203, 110, 240, 0.3);
+  color: rgb(203, 110, 240);
+  padding: 8px 16px;
+  border-radius: 25px;
+  font-size: 0.75em;
+  font-family: "RedHatSemiBold";
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  box-shadow: 0 2px 10px rgba(203, 110, 240, 0.1);
+}
+
+.tags span:hover {
+  background: rgba(203, 110, 240, 0.2);
+  border-color: rgba(203, 110, 240, 0.6);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(203, 110, 240, 0.2);
+}
+
+/* Remove the box-shadow from follower when preview is visible */
+#follower.preview-visible {
+  opacity: 0;
+  visibility: hidden;
 }
